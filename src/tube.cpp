@@ -46,7 +46,7 @@ namespace ctf {
 
 struct SubprocessWrapper {
     subprocess_s s{};
-    SubprocessWrapper()                                     = default;
+    SubprocessWrapper() = default;
     ~SubprocessWrapper() { subprocess_destroy(&s); }
     SubprocessWrapper(const SubprocessWrapper &)            = delete;
     SubprocessWrapper(SubprocessWrapper &&)                 = default;
@@ -117,8 +117,8 @@ std::string Process::readln() {
 
 std::string Process::readall() {
     std::string ret;
-    for (int ch = fgetc(pimpl->subprocess->stdout_file);;
-         ch     = fgetc(pimpl->subprocess->stdout_file)) {
+    auto *f = pimpl->subprocess->stdout_file;
+    for (int ch = fgetc(f); /**/; ch = fgetc(f)) {
         ret.push_back(static_cast<char>(ch));
         if (ch == EOF)
             break;
